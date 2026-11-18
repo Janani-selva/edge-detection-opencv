@@ -49,12 +49,87 @@ Display all edge-detected images for comparison.
 
 ## Developed By
 
-- **Name:** ____________________________  
-- **Register No:** ______________________  
+- **Name:** Janani S
+- **Register No:** 212224230103
+```
 
----
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Read Image
+img = cv2.imread("C:/Users/admin/OneDrive/Documents/Downloads/Image 6 (2).jpg")
+
+# Convert to Grayscale
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+# 1. Sobel Edge Detection
+sobel_x = cv2.Sobel(gray, cv2.CV_64F, 1, 0, ksize=3)
+sobel_y = cv2.Sobel(gray, cv2.CV_64F, 0, 1, ksize=3)
+sobel = cv2.convertScaleAbs(cv2.magnitude(sobel_x, sobel_y))
+
+# 2. Prewitt Edge Detection
+prewitt_x = np.array([[-1, 0, 1],
+                      [-1, 0, 1],
+                      [-1, 0, 1]])
+
+prewitt_y = np.array([[-1, -1, -1],
+                      [0, 0, 0],
+                      [1, 1, 1]])
+
+px = cv2.filter2D(gray, cv2.CV_32F, prewitt_x)
+py = cv2.filter2D(gray, cv2.CV_32F, prewitt_y)
+prewitt = cv2.convertScaleAbs(cv2.magnitude(px, py))
+
+# 3. Roberts Edge Detection
+roberts_x = np.array([[1, 0],
+                      [0, -1]])
+
+roberts_y = np.array([[0, 1],
+                      [-1, 0]])
+
+rx = cv2.filter2D(gray, cv2.CV_32F, roberts_x)
+ry = cv2.filter2D(gray, cv2.CV_32F, roberts_y)
+roberts = cv2.convertScaleAbs(cv2.magnitude(rx, ry))
+
+# 4. Laplacian Edge Detection
+laplacian = cv2.Laplacian(gray, cv2.CV_64F)
+laplacian = cv2.convertScaleAbs(laplacian)
+
+# 5. Canny Edge Detection
+canny = cv2.Canny(gray, 100, 200)
+
+# Display Results
+images = [gray, sobel, prewitt, roberts, laplacian, canny]
+
+titles = ["Original Grayscale",
+          "Sobel Edge Detection",
+          "Prewitt Edge Detection",
+          "Roberts Edge Detection",
+          "Laplacian Edge Detection",
+          "Canny Edge Detection"]
+
+plt.figure(figsize=(14, 9))
+
+for i in range(6):
+    plt.subplot(2, 3, i + 1)
+    plt.imshow(images[i], cmap='gray')
+    plt.title(titles[i])
+    plt.axis("off")
+
+plt.tight_layout()
+plt.show()
+
+print("Edge Detection Completed Successfully!")
+
+
+
+```
 
 ## Output
+<img width="1335" height="840" alt="Screenshot 2026-11-18 085531" src="https://github.com/user-attachments/assets/4ea2f2bf-bc33-4255-897b-4bcb0c4af28c" />
+
+
 
 ###  Sobel Edge Detector
 - Detects edges in horizontal and vertical directions  
